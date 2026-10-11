@@ -44,7 +44,7 @@ footer{text-align:center;padding:22px 14px;background:var(--brown);color:#fff;ma
 <p>📍 Purok 3, Brgy. Quezon, Lipa City — Near Quezon Residences</p>
 </header>
 <main>
-<div class="banner"><b>Welcome sa Zia's Snack!</b><br>Piliin ang mga gusto mo, idagdag sa order, at tingnan ang total bago mag-message.</div>
+<div class="banner"><b>Welcome sa Zia's Snack!</b><br>Piliin ang mga gusto mo, idagdag sa order, at isumite ang order para maitala sa system.</div>
 <h2>Menu</h2>
 <div class="filters" id="filters"></div>
 <div class="grid" id="products"></div>
@@ -58,7 +58,7 @@ footer{text-align:center;padding:22px 14px;background:var(--brown);color:#fff;ma
 <select id="orderType"><option>Pickup</option><option>Delivery (i-confirm muna ang availability at fee)</option></select>
 <label for="address">Address (kung delivery)</label><input id="address" placeholder="Barangay / street / landmark">
 <label for="notes">Special request</label><textarea id="notes" rows="2" placeholder="Ilagay kung may request"></textarea>
-<button class="order" onclick="sendOrder()">Order via Messenger</button>
+<button class="order" onclick="sendOrder()">Submit Order</button>
 <p class="note">Paalala: Iko-confirm pa ng Zia's Snack ang availability, delivery fee at final order. Ang presyo ng bawat meal bundle ay nakalista; hindi pa nakalagay ang eksaktong laman ng bawat bundle sa website.</p>
 </section>
 </main>
@@ -116,15 +116,68 @@ if(!names.length){document.getElementById("cartItems").textContent="Wala pang na
 else{document.getElementById("cartItems").innerHTML=names.map(n=>{const p=products.find(x=>x.name===n);total+=p.price*cart[n];return `<div class="cartrow"><span>${n}<br>₱${p.price.toFixed(2)} × ${cart[n]}</span><span class="qty"><button onclick="changeQty('${n.replace(/'/g,"\\'")}',-1)">−</button> ${cart[n]} <button onclick="changeQty('${n.replace(/'/g,"\\'")}',1)">+</button></span></div>`}).join("");}
 document.getElementById("total").textContent=total.toFixed(2);
 }
-function sendOrder(){
-const names=Object.keys(cart);if(!names.length){alert("Pumili muna ng pagkain.");return;}
-const total=names.reduce((s,n)=>s+products.find(p=>p.name===n).price*cart[n],0);
-const message=`ORDER - ZIA'S SNACK\nPangalan: ${document.getElementById("customer").value}\nContact: ${document.getElementById("phone").value}\nOrder type: ${document.getElementById("orderType").value}\nAddress: ${document.getElementById("address").value}\n\n${names.map(n=>n+" x "+cart[n]).join("\n")}\nTotal: ₱${total.toFixed(2)}\nRequest: ${document.getElementById("notes").value}\nPaki-confirm ang order.`;
-const url="https://m.me/";
-const copyFallback=()=>{prompt("Kopyahin ang order na ito at ipadala sa Messenger:",message);};
-if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(message).then(()=>{alert("Nakopya ang order details. Ipadala ito sa chat ng Zia's Snack na bubuksan.");window.open(url,"_blank");}).catch(copyFallback);}else{copyFallback();window.open(url,"_blank");}
+async function sendOrder(){
+  const names = Object.keys(cart);
+  if (!names.length) { alert("Pumili muna ng pagkain."); return; }
+
+  const customer = document.getElementById("customer").value.trim();
+  const phone = document.getElementById("phone").value.trim();
+  if (!customer) { alert("Ilagay ang pangalan mo."); document.getElementById("customer").focus(); return; }
+  if (!phone) { alert("Ilagay ang contact number mo."); document.getElementById("phone").focus(); return; }
+
+  // I-paste dito ang Web App URL mula sa Google Apps Script deployment.
+  const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzKOAgJuHiYWA7RfXlFvfuplQ6dCZRMYju9dJL4sG_W6QLii3_iIjUrxxljNU_D6JoYfw/exec";
+
+  if (!GOOGLE_SCRIPT_URL.startsWith("https://script.google.com/macros/s/")) {
+    alert("Hindi pa naka-setup ang Google Sheets connection. Sundin muna ang setup instructions at ilagay ang Apps Script Web App URL sa index.html.");
+    return;
+  }
+
+  const total = names.reduce((sum, n) => sum + products.find(p => p.name === n).price * cart[n], 0);
+  const order = {
+    orderId: "ZIA-" + Date.now(),
+    customer,
+    phone,
+    orderType: document.getElementById("orderType").value,
+    address: document.getElementById("address").value.trim(),
+    items: names.map(n => ({ name: n, quantity: cart[n], unitPrice: products.find(p => p.name === n).price })),
+    total: Number(total.toFixed(2)),
+    notes: document.getElementById("notes").value.trim(),
+    source: "Zia's Snack website"
+  };
+
+  const button = document.querySelector(".order");
+  const originalText = button.textContent;
+  button.disabled = true;
+  button.textContent = "Ipinapadala ang order...";
+
+  try {
+    // URLSearchParams avoids a cross-origin JSON preflight with Apps Script.
+    const body = new URLSearchParams({ payload: JSON.stringify(order) });
+    await fetch(GOOGLE_SCRIPT_URL, {
+      method: "POST",
+      mode: "no-cors",
+      body
+    });
+
+    alert("Naipadala ang request para sa order na " + order.orderId +
+      ". Pakihintay ng kumpirmasyon mula sa Zia's Snack. Kung hindi makita ang order sa Google Sheets, tingnan ang Apps Script Executions at deployment settings.");
+    cart = {};
+    renderCart();
+    document.getElementById("customer").value = "";
+    document.getElementById("phone").value = "";
+    document.getElementById("address").value = "";
+    document.getElementById("notes").value = "";
+  } catch (error) {
+    alert("Hindi naipadala ang order. Pakisuri ang internet connection at subukan ulit. Kung magpatuloy ang problema, kontakin ang Zia's Snack.");
+    console.error("Order submission error:", error);
+  } finally {
+    button.disabled = false;
+    button.textContent = originalText;
+  }
 }
 renderFilters();renderProducts();renderCart();
 </script>
 </body>
-</html>
+                                        </html>
+  
