@@ -1,136 +1,130 @@
-
 <!DOCTYPE html>
 <html lang="fil">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Zia's Snack | Order Online</title>
+<title>Zia's Snack | Online Menu</title>
 <style>
-*{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:#fff8e9;color:#29231f}
-header{background:#c92525;color:white;text-align:center;padding:25px 12px}
-header h1{margin:0;font-size:30px}
-header p{margin:8px 0 0}
-main{max-width:760px;margin:auto;padding:16px}
-h2{color:#b91f24}
-.notice{background:#ffdf6b;padding:12px;border-radius:10px}
-.categories{display:grid;grid-template-columns:1fr 1fr;gap:9px}
-.categories button,.add{border:0;border-radius:9px;padding:12px;background:#f6c640;font-weight:bold;cursor:pointer}
-.categories button.active{background:#c92525;color:white}
-.menu{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.item{background:white;border:1px solid #eadfc9;border-radius:12px;padding:12px}
-.item h3{font-size:16px;margin:0 0 8px}
-.price{font-weight:bold;color:#b91f24;margin-bottom:10px}
-.add{width:100%;background:#c92525;color:white}
+:root{--red:#c82027;--yellow:#ffd72e;--brown:#3a170d;--cream:#fff9e8;--green:#168348}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:var(--cream);color:#281b16}
+header{background:linear-gradient(135deg,#ffe24b,#ffbf18);text-align:center;padding:18px 14px 22px;border-bottom:6px solid var(--red)}
+.logo{width:145px;height:145px;object-fit:contain;border-radius:50%;background:#fff;box-shadow:0 3px 12px #0002}
+header h1{color:var(--red);font-size:30px;margin:8px 0 3px;text-shadow:1px 1px #fff}
+header p{margin:5px 0;font-weight:700}
+main{max-width:900px;margin:auto;padding:16px}
+.banner{background:#fff;border-left:5px solid var(--red);padding:12px;border-radius:10px;margin:0 0 16px}
+h2{color:var(--red);margin:22px 0 12px}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.filters button{border:0;border-radius:20px;padding:10px 13px;background:#ffe27a;color:#35180e;font-weight:bold}
+.filters button.active{background:var(--red);color:#fff}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.card{background:#fff;border:1px solid #f0dfb8;border-radius:14px;overflow:hidden;box-shadow:0 2px 7px #0000000b}
+.foodpic{height:112px;display:flex;align-items:center;justify-content:center;font-size:57px;background:linear-gradient(135deg,#fff0b5,#ffe16b)}
+.info{padding:11px}
+.info h3{font-size:16px;margin:0 0 7px;line-height:1.25}
+.price{font-size:18px;color:var(--red);font-weight:800;margin:0 0 10px}
+.add{border:0;border-radius:8px;background:var(--red);color:#fff;font-weight:bold;width:100%;padding:10px}
+.cart{margin-top:24px;background:#fff;padding:15px;border-radius:14px;border:1px solid #f0dfb8}
+.cartrow{display:flex;justify-content:space-between;align-items:center;gap:8px;border-bottom:1px solid #eee;padding:8px 0}
+.qty button{border:0;border-radius:6px;background:#ffe27a;padding:5px 9px;font-weight:bold}
 label{display:block;font-weight:bold;margin:12px 0 5px}
-input,select,textarea{width:100%;padding:12px;border:1px solid #cfc5b4;border-radius:8px;font-size:16px;background:white}
-.cart{background:white;border-radius:12px;padding:14px;margin-top:18px}
-.total{font-size:22px;font-weight:bold;margin:15px 0}
-.order{width:100%;border:0;border-radius:10px;background:#187a43;color:white;padding:15px;font-size:17px;font-weight:bold}
-footer{text-align:center;padding:22px;color:#66594b}
-@media(max-width:380px){.menu{grid-template-columns:1fr}}
+input,select,textarea{width:100%;border:1px solid #d8cbb1;border-radius:8px;padding:12px;font:inherit;background:#fff}
+.total{font-size:23px;font-weight:800;margin:16px 0;color:var(--red)}
+.order{width:100%;padding:14px;border:0;border-radius:10px;background:var(--green);color:#fff;font-size:17px;font-weight:bold}
+.note{font-size:13px;color:#66584d;line-height:1.5}
+footer{text-align:center;padding:22px 14px;background:var(--brown);color:#fff;margin-top:24px}
+@media(min-width:650px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}.foodpic{height:135px}}
 </style>
 </head>
 <body>
 <header>
-<h1>🍔 Zia's Snack 🍟</h1>
-<p>Sarap sa budget, saya sa bawat kagat!</p>
-<p>📍 Purok 3, Brgy. Quezon, Lipa City</p>
+<img class="logo" src="zias_snack_logo.png" alt="Zia's Snack logo">
+<h1>Zia's Snack</h1>
+<p>GOOD FOOD • GREAT VIBES • ALWAYS FRESH!</p>
+<p>📍 Purok 3, Brgy. Quezon, Lipa City — Near Quezon Residences</p>
 </header>
 <main>
-<p class="notice"><b>Welcome!</b> Piliin ang pagkain, dami at detalye ng order mo.</p>
-
-<h2>Our Menu</h2>
-<div class="categories">
-<button class="active" onclick="show('All',this)">All Menu</button>
-<button onclick="show('Solo Meals',this)">Solo Meals</button>
-<button onclick="show('Couple Meals',this)">Couple Meals</button>
-<button onclick="show('Tropa Meals',this)">Tropa Meals</button>
-<button onclick="show('Family Feast',this)">Family Feast</button>
-</div>
-
-<div id="menu" class="menu" style="margin-top:14px"></div>
-
+<div class="banner"><b>Welcome sa Zia's Snack!</b><br>Piliin ang mga gusto mo, idagdag sa order, at tingnan ang total bago mag-message.</div>
+<h2>Menu</h2>
+<div class="filters" id="filters"></div>
+<div class="grid" id="products"></div>
 <section class="cart">
-<h2>Your Order</h2>
-<div id="cart">Wala pang napiling pagkain.</div>
-<div class="total">Total: ₱<span id="total">0</span></div>
-
-<label for="customer">Pangalan</label>
-<input id="customer" placeholder="Ilagay ang pangalan">
-
-<label for="contact">Contact number</label>
-<input id="contact" type="tel" placeholder="09xxxxxxxxx">
-
-<label for="method">Order type</label>
-<select id="method">
-<option>Pickup</option>
-<option>Delivery - itanong muna ang availability</option>
-</select>
-
-<label for="address">Address (para sa delivery)</label>
-<input id="address" placeholder="Ilagay ang address kung delivery">
-
-<label for="notes">Karagdagang request</label>
-<textarea id="notes" rows="2" placeholder="Hal. walang sibuyas"></textarea>
-
-<button class="order" onclick="sendOrder()">📩 Order via Messenger</button>
-<p style="font-size:13px">Iche-check muna namin ang order, availability at delivery fee sa Messenger.</p>
+<h2>🛒 Your Order</h2>
+<div id="cartItems">Wala pang napiling item.</div>
+<div class="total">Total: ₱<span id="total">0.00</span></div>
+<label for="customer">Pangalan</label><input id="customer" placeholder="Pangalan mo">
+<label for="phone">Contact number</label><input id="phone" type="tel" placeholder="09xxxxxxxxx">
+<label for="orderType">Order type</label>
+<select id="orderType"><option>Pickup</option><option>Delivery (i-confirm muna ang availability at fee)</option></select>
+<label for="address">Address (kung delivery)</label><input id="address" placeholder="Barangay / street / landmark">
+<label for="notes">Special request</label><textarea id="notes" rows="2" placeholder="Ilagay kung may request"></textarea>
+<button class="order" onclick="sendOrder()">Order via Messenger</button>
+<p class="note">Paalala: Iko-confirm pa ng Zia's Snack ang availability, delivery fee at final order. Ang presyo ng bawat meal bundle ay nakalista; hindi pa nakalagay ang eksaktong laman ng bawat bundle sa website.</p>
 </section>
 </main>
 <footer>Salamat sa pagsuporta sa Zia's Snack! ❤️</footer>
-
 <script>
-const products=[
-{name:"Regular Burger",price:25,cat:"Solo Meals"},
-{name:"Cheese Burger",price:30,cat:"Solo Meals"},
-{name:"Fries - Regular",price:39,cat:"Solo Meals"},
-{name:"Fries - Large",price:59,cat:"Solo Meals"},
-{name:"Cheesy Fries Overload",price:59,cat:"Solo Meals"},
-{name:"Cheese Stick (10 pcs)",price:20,cat:"Solo Meals"},
-{name:"Fishball (12 pcs)",price:10,cat:"Solo Meals"},
-{name:"Squidball (4 pcs)",price:10,cat:"Solo Meals"},
-{name:"Sweet Corn",price:25,cat:"Solo Meals"},
-{name:"Palamig (16 oz)",price:15,cat:"Solo Meals"},
-{name:"Siomai - Steamed (4 pcs)",price:null,cat:"Solo Meals"},
-{name:"Siomai - Fried (4 pcs)",price:null,cat:"Solo Meals"},
-{name:"Hotdog Sandwich",price:null,cat:"Solo Meals"},
-{name:"Fruity Soda",price:null,cat:"Solo Meals"},
-{name:"Blue Lemonade",price:null,cat:"Solo Meals"},
-{name:"Sago Gulaman",price:null,cat:"Solo Meals"},
-{name:"Couple Meal",price:null,cat:"Couple Meals"},
-{name:"Tropa Meal",price:null,cat:"Tropa Meals"},
-{name:"Family Feast",price:null,cat:"Family Feast"}
+const products = [
+{name:"Regular Fries",price:20,cat:"Ala Carte",pic:"🍟"},
+{name:"Medium Fries",price:30,cat:"Ala Carte",pic:"🍟"},
+{name:"Large Fries",price:45,cat:"Ala Carte",pic:"🍟"},
+{name:"Cheesy Fries Overload",price:59,cat:"Ala Carte",pic:"🧀"},
+{name:"Fries with Drinks - Regular",price:39,cat:"Fries & Drinks",pic:"🍟🥤"},
+{name:"Fries with Drinks - Large",price:59,cat:"Fries & Drinks",pic:"🍟🥤"},
+{name:"Cheese Stick",price:20,cat:"Street Food",pic:"🧀"},
+{name:"Sweet Cheese Corn",price:25,cat:"Street Food",pic:"🌽"},
+{name:"Fishball",price:10,cat:"Street Food",pic:"🍡"},
+{name:"Kikiam",price:10,cat:"Street Food",pic:"🍢"},
+{name:"Squidball",price:10,cat:"Street Food",pic:"🍡"},
+{name:"Regular Burger",price:25,cat:"Burgers & Hotdogs",pic:"🍔"},
+{name:"Cheese Burger",price:30,cat:"Burgers & Hotdogs",pic:"🍔"},
+{name:"Hotdog Sandwich",price:30,cat:"Burgers & Hotdogs",pic:"🌭"},
+{name:"Overload Hotdog Sandwich",price:45,cat:"Burgers & Hotdogs",pic:"🌭"},
+{name:"Siomai - Steamed",price:20,cat:"Street Food",pic:"🥟"},
+{name:"Siomai - Fried",price:20,cat:"Street Food",pic:"🥟"},
+{name:"Fruit Soda",price:30,cat:"Drinks",pic:"🥤"},
+{name:"B1T1 Regular Burger",price:45,cat:"B1T1 Promos",pic:"🍔🍔"},
+{name:"B1T1 Cheese Burger",price:55,cat:"B1T1 Promos",pic:"🍔🍔"},
+{name:"B1T1 Hotdog Sandwich",price:55,cat:"B1T1 Promos",pic:"🌭🌭"},
+{name:"B1T1 Overload Hotdog Sandwich",price:85,cat:"B1T1 Promos",pic:"🌭🌭"},
+{name:"Solo 1",price:94,cat:"Solo Meals",pic:"🍱"},
+{name:"Solo 2",price:94,cat:"Solo Meals",pic:"🍱"},
+{name:"Solo 3",price:89,cat:"Solo Meals",pic:"🍱"},
+{name:"Couple 1",price:175,cat:"Couple Meals",pic:"🍱"},
+{name:"Couple 2",price:205,cat:"Couple Meals",pic:"🍱"},
+{name:"Couple 3",price:170,cat:"Couple Meals",pic:"🍱"},
+{name:"Tropa 1",price:235,cat:"Tropa Meals",pic:"🍱"},
+{name:"Tropa 2",price:250,cat:"Tropa Meals",pic:"🍱"},
+{name:"Tropa 3",price:250,cat:"Tropa Meals",pic:"🍱"},
+{name:"Family Feast",price:320,cat:"Family Feast",pic:"🍱"}
 ];
-let cart={};
-function show(cat,btn){
-document.querySelectorAll('.categories button').forEach(b=>b.classList.remove('active'));
-btn.classList.add('active');
-document.getElementById('menu').innerHTML=products.filter(p=>cat==='All'||p.cat===cat).map(p=>
-`<article class="item"><h3>${p.name}</h3><div class="price">${p.price===null?'Price: inquire via Messenger':'₱'+p.price}</div><button class="add" onclick="add('${p.name.replace(/'/g,"\\'")}')">+ Add to order</button></article>`
-).join('');
+let cart={}; let current="All";
+const cats=["All","Ala Carte","Fries & Drinks","Street Food","Burgers & Hotdogs","Drinks","B1T1 Promos","Solo Meals","Couple Meals","Tropa Meals","Family Feast"];
+function renderFilters(){
+document.getElementById("filters").innerHTML=cats.map(c=>`<button class="${c===current?'active':''}" onclick="setCat('${c}')">${c}</button>`).join("");
 }
-function add(name){cart[name]=(cart[name]||0)+1;renderCart()}
+function setCat(c){current=c;renderFilters();renderProducts();}
+function renderProducts(){
+const shown=products.filter(p=>current==="All"||p.cat===current);
+document.getElementById("products").innerHTML=shown.map((p)=>`<article class="card"><div class="foodpic" aria-label="${p.name}">${p.pic}</div><div class="info"><h3>${p.name}</h3><div class="price">₱${p.price.toFixed(2)}</div><button class="add" onclick="addItem('${p.name.replace(/'/g,"\\'")}')">+ Add to order</button></div></article>`).join("");
+}
+function addItem(name){cart[name]=(cart[name]||0)+1;renderCart();}
+function changeQty(name,d){cart[name]=(cart[name]||0)+d;if(cart[name]<=0)delete cart[name];renderCart();}
 function renderCart(){
-let total=0,lines=[];
-for(const name in cart){
-const p=products.find(x=>x.name===name);
-lines.push(`${name} x ${cart[name]}`);
-if(p.price!==null)total+=p.price*cart[name];
-}
-document.getElementById('cart').innerHTML=lines.length?lines.map(x=>'<p>'+x+'</p>').join(''):'Wala pang napiling pagkain.';
-document.getElementById('total').textContent=total;
+const names=Object.keys(cart);let total=0;
+if(!names.length){document.getElementById("cartItems").textContent="Wala pang napiling item.";}
+else{document.getElementById("cartItems").innerHTML=names.map(n=>{const p=products.find(x=>x.name===n);total+=p.price*cart[n];return `<div class="cartrow"><span>${n}<br>₱${p.price.toFixed(2)} × ${cart[n]}</span><span class="qty"><button onclick="changeQty('${n.replace(/'/g,"\\'")}',-1)">−</button> ${cart[n]} <button onclick="changeQty('${n.replace(/'/g,"\\'")}',1)">+</button></span></div>`}).join("");}
+document.getElementById("total").textContent=total.toFixed(2);
 }
 function sendOrder(){
-if(!Object.keys(cart).length){alert('Pumili muna ng pagkain.');return}
-const lines=Object.keys(cart).map(n=>n+' x '+cart[n]).join('\n');
-const total=document.getElementById('total').textContent;
-const message=`ORDER - ZIA'S SNACK\nPangalan: ${document.getElementById('customer').value}\nContact: ${document.getElementById('contact').value}\nOrder type: ${document.getElementById('method').value}\nAddress: ${document.getElementById('address').value}\nOrder:\n${lines}\nSubtotal ng may nakalistang presyo: ₱${total}\nRequest: ${document.getElementById('notes').value}\nPaki-confirm ang final total at availability.`;
-try{navigator.clipboard.writeText(message)}catch(e){}
-alert('Kopyahin ang order details kung kailangan. Bubuksan ang Facebook Messenger. Ipadala roon ang order at hintayin ang confirmation.');
-window.open('https://m.me/','_blank');
+const names=Object.keys(cart);if(!names.length){alert("Pumili muna ng pagkain.");return;}
+const total=names.reduce((s,n)=>s+products.find(p=>p.name===n).price*cart[n],0);
+const message=`ORDER - ZIA'S SNACK\nPangalan: ${document.getElementById("customer").value}\nContact: ${document.getElementById("phone").value}\nOrder type: ${document.getElementById("orderType").value}\nAddress: ${document.getElementById("address").value}\n\n${names.map(n=>n+" x "+cart[n]).join("\n")}\nTotal: ₱${total.toFixed(2)}\nRequest: ${document.getElementById("notes").value}\nPaki-confirm ang order.`;
+const url="https://m.me/";
+const copyFallback=()=>{prompt("Kopyahin ang order na ito at ipadala sa Messenger:",message);};
+if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(message).then(()=>{alert("Nakopya ang order details. Ipadala ito sa chat ng Zia's Snack na bubuksan.");window.open(url,"_blank");}).catch(copyFallback);}else{copyFallback();window.open(url,"_blank");}
 }
-show('All',document.querySelector('.categories button'));
+renderFilters();renderProducts();renderCart();
 </script>
 </body>
 </html>
