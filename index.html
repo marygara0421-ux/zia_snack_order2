@@ -22,6 +22,7 @@ h2{color:var(--red);margin:22px 0 12px}
 .foodpic{height:112px;display:flex;align-items:center;justify-content:center;font-size:57px;background:linear-gradient(135deg,#fff0b5,#ffe16b)}
 .info{padding:11px}
 .info h3{font-size:16px;margin:0 0 7px;line-height:1.25}
+.combo-includes{font-size:12px;line-height:1.45;color:#55463c;margin:0 0 11px;padding-left:18px}.combo-label{font-size:11px;font-weight:800;color:var(--green);text-transform:uppercase;letter-spacing:.4px;margin:0 0 5px}
 .price{font-size:18px;color:var(--red);font-weight:800;margin:0 0 10px}
 .add{border:0;border-radius:8px;background:var(--red);color:#fff;font-weight:bold;width:100%;padding:10px}
 .cart{margin-top:24px;background:#fff;padding:15px;border-radius:14px;border:1px solid #f0dfb8}
@@ -59,7 +60,7 @@ footer{text-align:center;padding:22px 14px;background:var(--brown);color:#fff;ma
 <label for="address">Address (kung delivery)</label><input id="address" placeholder="Barangay / street / landmark">
 <label for="notes">Special request</label><textarea id="notes" rows="2" placeholder="Ilagay kung may request"></textarea>
 <button class="order" onclick="sendOrder()">Submit Order</button>
-<p class="note">Paalala: Iko-confirm pa ng Zia's Snack ang availability, delivery fee at final order. Ang presyo ng bawat meal bundle ay nakalista; hindi pa nakalagay ang eksaktong laman ng bawat bundle sa website.</p>
+<p class="note">Paalala: Iko-confirm pa ng Zia's Snack ang availability, delivery fee at final order. Makikita sa bawat bundle ang mga kasamang pagkain at dami nito.</p>
 </section>
 </main>
 <footer>Salamat sa pagsuporta sa Zia's Snack! ❤️</footer>
@@ -87,16 +88,16 @@ const products = [
 {name:"B1T1 Cheese Burger",price:55,cat:"B1T1 Promos",pic:"🍔🍔"},
 {name:"B1T1 Hotdog Sandwich",price:55,cat:"B1T1 Promos",pic:"🌭🌭"},
 {name:"B1T1 Overload Hotdog Sandwich",price:85,cat:"B1T1 Promos",pic:"🌭🌭"},
-{name:"Solo 1",price:94,cat:"Solo Meals",pic:"🍱"},
-{name:"Solo 2",price:94,cat:"Solo Meals",pic:"🍱"},
-{name:"Solo 3",price:89,cat:"Solo Meals",pic:"🍱"},
-{name:"Couple 1",price:175,cat:"Couple Meals",pic:"🍱"},
-{name:"Couple 2",price:205,cat:"Couple Meals",pic:"🍱"},
-{name:"Couple 3",price:170,cat:"Couple Meals",pic:"🍱"},
-{name:"Tropa 1",price:235,cat:"Tropa Meals",pic:"🍱"},
-{name:"Tropa 2",price:250,cat:"Tropa Meals",pic:"🍱"},
-{name:"Tropa 3",price:250,cat:"Tropa Meals",pic:"🍱"},
-{name:"Family Feast",price:320,cat:"Family Feast",pic:"🍱"}
+{name:"Solo 1",price:94,cat:"Solo Meals",pic:"🍱",includes:["Cheese Burger × 1", "Regular Fries × 1", "Cheese Stick × 1", "Fruit Soda × 1"]},
+{name:"Solo 2",price:94,cat:"Solo Meals",pic:"🍱",includes:["Hotdog Sandwich × 1", "Regular Fries × 1", "Cheese Stick × 1", "Fruit Soda × 1"]},
+{name:"Solo 3",price:89,cat:"Solo Meals",pic:"🍱",includes:["Regular Burger × 1", "Regular Fries × 1", "Cheese Stick × 1", "Fruit Soda × 1"]},
+{name:"Couple 1",price:175,cat:"Couple Meals",pic:"🍱",includes:["Cheese Burger × 2", "Large Fries × 1", "Cheese Stick × 1", "Fruit Soda × 2"]},
+{name:"Couple 2",price:205,cat:"Couple Meals",pic:"🍱",includes:["Overload Hotdog Sandwich × 2", "Large Fries × 1", "Cheese Stick × 1", "Fruit Soda × 2"]},
+{name:"Couple 3",price:170,cat:"Couple Meals",pic:"🍱",includes:["Regular Burger × 1", "Large Fries × 1", "Cheese Stick × 1", "Fruit Soda × 2", "Hotdog Sandwich × 1"]},
+{name:"Tropa 1",price:235,cat:"Tropa Meals",pic:"🍱",includes:["Regular Burger × 3", "Medium Fries × 2", "Cheese Stick × 2", "Fruit Soda × 3"]},
+{name:"Tropa 2",price:250,cat:"Tropa Meals",pic:"🍱",includes:["Cheese Burger × 3", "Medium Fries × 2", "Cheese Stick × 2", "Fruit Soda × 3"]},
+{name:"Tropa 3",price:250,cat:"Tropa Meals",pic:"🍱",includes:["Hotdog Sandwich × 3", "Medium Fries × 2", "Cheese Stick × 2", "Fruit Soda × 3"]},
+{name:"Family Feast",price:320,cat:"Family Feast",pic:"🍱",includes:["Cheese Burger × 2", "Large Fries × 2", "Regular Burger × 2", "Cheese Stick × 2", "Fruit Soda × 4"]}
 ];
 let cart={}; let current="All";
 const cats=["All","Ala Carte","Fries & Drinks","Street Food","Burgers & Hotdogs","Drinks","B1T1 Promos","Solo Meals","Couple Meals","Tropa Meals","Family Feast"];
@@ -106,7 +107,7 @@ document.getElementById("filters").innerHTML=cats.map(c=>`<button class="${c===c
 function setCat(c){current=c;renderFilters();renderProducts();}
 function renderProducts(){
 const shown=products.filter(p=>current==="All"||p.cat===current);
-document.getElementById("products").innerHTML=shown.map((p)=>`<article class="card"><div class="foodpic" aria-label="${p.name}">${p.pic}</div><div class="info"><h3>${p.name}</h3><div class="price">₱${p.price.toFixed(2)}</div><button class="add" onclick="addItem('${p.name.replace(/'/g,"\\'")}')">+ Add to order</button></div></article>`).join("");
+document.getElementById("products").innerHTML=shown.map((p)=>`<article class="card"><div class="foodpic" aria-label="${p.name}">${p.pic}</div><div class="info"><h3>${p.name}</h3><div class="price">₱${p.price.toFixed(2)}</div>${p.includes?`<p class="combo-label">Kasama sa bundle</p><ul class="combo-includes">${p.includes.map(item=>`<li>${item}</li>`).join("")}</ul>`:""}<button class="add" onclick="addItem('${p.name.replace(/'/g,"\\'")}')">+ Add to order</button></div></article>`).join("");
 }
 function addItem(name){cart[name]=(cart[name]||0)+1;renderCart();}
 function changeQty(name,d){cart[name]=(cart[name]||0)+d;if(cart[name]<=0)delete cart[name];renderCart();}
@@ -180,4 +181,5 @@ renderFilters();renderProducts();renderCart();
 </script>
 </body>
                                         </html>
+
   
