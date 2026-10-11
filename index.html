@@ -127,7 +127,7 @@ async function sendOrder(){
   if (!phone) { alert("Ilagay ang contact number mo."); document.getElementById("phone").focus(); return; }
 
   // I-paste dito ang Web App URL mula sa Google Apps Script deployment.
-  const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzKOAgJuHiYWA7RfXlFvfuplQ6dCZRMYju9dJL4sG_W6QLii3_iIjUrxxljNU_D6JoYfw/exec";
+  const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwZR4gRBns5aJgSTwMnUybvdBC2MNDbf8Hpj5rlc1rGOa6gkS9P-NFN1ZXs0xwrvj3nLg/exec";
 
   if (!GOOGLE_SCRIPT_URL.startsWith("https://script.google.com/macros/s/")) {
     alert("Hindi pa naka-setup ang Google Sheets connection. Sundin muna ang setup instructions at ilagay ang Apps Script Web App URL sa index.html.");
